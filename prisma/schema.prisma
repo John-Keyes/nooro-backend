@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Tasks {
-  Int        @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   title      String
   color      String
   completed  Boolean

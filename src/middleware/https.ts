@@ -2,7 +2,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { Request, Response, Express } from "express";
 
-export default (( app: Express) => {
+export default ((app: Express) => {
     let clientURL;
     let apiURL;
     if(process.env.MODE === "dev") {

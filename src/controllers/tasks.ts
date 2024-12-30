@@ -3,16 +3,31 @@ import { prisma } from "../index";
 
     const GetTasks = async (req: Request, res: Response) => {
         try {
-            const tasks = await prisma.Tasks.findMany();
-            res.status(200).json(tasks);
+            const tasks = await prisma.tasks.findMany();
+            const taskCount = tasks.length
+            const completedCount = tasks.filter(task => task.completed == true).length;
+            res.status(200).json({tasks, taskCount, completedCount });
         } catch (e) {
             res.status(500).json({ error: e });
         }
     }
+    const GetOneTask = async (req: Request, res: Response) => {
+      const {id} = req.params;
+      try {
+          const tasks = await prisma.tasks.findUnique({
+            where: {
+              id: Number(id)
+            }
+          });
+          res.status(200).json(tasks);
+      } catch (e) {
+          res.status(500).json({ error: e });
+      }
+  }
     const Create = async (req: Request, res: Response) => {
         try {
             const { title, color, completed } = req.body;
-            const newTask = await prisma.post.create({
+            const newTask = await prisma.tasks.create({
               data: {
                 title,
                 color,
@@ -27,7 +42,7 @@ import { prisma } from "../index";
     const Update = async (req: Request, res: Response) => {
         try {
             const { id, title, color, completed } = req.body;
-            const updatedTask = await prisma.Tasks.update({
+            const updatedTask = await prisma.tasks.update({
               where: {
                 id: Number(id),
               },
@@ -45,7 +60,7 @@ import { prisma } from "../index";
     const Remove = async (req: Request, res: Response) => {
         try {
             const { id } = req.body;
-            const deletedTask = await prisma.Tasks.delete({
+            const deletedTask = await prisma.tasks.delete({
               where: {
                 id: Number(id),
               }
@@ -56,4 +71,4 @@ import { prisma } from "../index";
         }
     }
 
-export { GetTasks, Create, Update, Remove };
+export { GetTasks, GetOneTask, Create, Update, Remove };
