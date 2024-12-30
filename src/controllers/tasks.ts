@@ -6,7 +6,7 @@ import { prisma } from "../index";
             const tasks = await prisma.tasks.findMany();
             const taskCount = tasks.length
             const completedCount = tasks.filter(task => task.completed == true).length;
-            res.status(200).json({tasks, taskCount, completedCount });
+            res.status(200).json({tasks, taskCount, completedCount});
         } catch (e) {
             res.status(500).json({ error: e });
         }
