@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import { prisma } from "../index";
+import { Task, TaskList } from "models/tasks";
 
     const GetTasks = async (req: Request, res: Response) => {
         try {
             const tasks = await prisma.tasks.findMany();
-            const taskCount = tasks.length
+            const taskCount = tasks.length;
             const completedCount = tasks.filter(task => task.completed == true).length;
-            res.status(200).json({tasks, taskCount, completedCount});
+            const taskList: TaskList = {tasks, taskCount, completedCount};
+            res.status(200).json(taskList);
         } catch (e) {
             res.status(500).json({ error: e });
         }
@@ -14,12 +16,12 @@ import { prisma } from "../index";
     const GetOneTask = async (req: Request, res: Response) => {
       const {id} = req.params;
       try {
-          const tasks = await prisma.tasks.findUnique({
+          const task: Task = await prisma.tasks.findUnique({
             where: {
               id: Number(id)
             }
-          });
-          res.status(200).json(tasks);
+          }) as Task;
+          res.status(200).json(task);
       } catch (e) {
           res.status(500).json({ error: e });
       }
@@ -27,7 +29,7 @@ import { prisma } from "../index";
     const Create = async (req: Request, res: Response) => {
         try {
             const { title, color, completed } = req.body;
-            const newTask = await prisma.tasks.create({
+            const newTask: Task = await prisma.tasks.create({
               data: {
                 title,
                 color,
@@ -35,6 +37,7 @@ import { prisma } from "../index";
               }
             });
             res.status(200).json(newTask);
+            console.log("hi");
           } catch (e) {
             res.status(500).json({ error: e });
           }
@@ -42,7 +45,7 @@ import { prisma } from "../index";
     const Update = async (req: Request, res: Response) => {
         try {
             const { id, title, color, completed } = req.body;
-            const updatedTask = await prisma.tasks.update({
+            const updatedTask: Task = await prisma.tasks.update({
               where: {
                 id: Number(id),
               },
@@ -60,12 +63,12 @@ import { prisma } from "../index";
     const Remove = async (req: Request, res: Response) => {
         try {
             const { id } = req.body;
-            const deletedTask = await prisma.tasks.delete({
+            await prisma.tasks.delete({
               where: {
                 id: Number(id),
               }
             });
-            res.status(200).json(deletedTask);
+            res.status(200).json();
         } catch (e) {
             res.status(500).json({ error: e });
         }
