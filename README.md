@@ -14,8 +14,8 @@ DB_URL = ""
 
 CLIENT_PORT=3040
 API_PORT=4040
-CLIENT_URL="http://localhost:3040"
-API_URL="http://localhost:4040"
+CLIENT_URL="http://localhost"
+API_URL="http://localhost"
 ```
 
 - Install the packages

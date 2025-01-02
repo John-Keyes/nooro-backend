@@ -18,10 +18,9 @@ const main = async () => {
 
   // Register API routes
   app.use("/tasks", TaskRouter);
+  console.log(port);
 
   app.listen(port);
-
-  //HTTPSMiddleware(app);
 
   //app.use('/api-docs', swaggerUi.serve);//, swaggerUi.setup(swaggerDocument));
   app.use(cors());
@@ -34,8 +33,7 @@ const main = async () => {
 
 main().then(async () => {
     await prisma.$connect();
-    }).catch(async (e) => {
-        console.error(e);
+    }).catch(async () => {
         await prisma.$disconnect();
         process.exit(1);
     });
