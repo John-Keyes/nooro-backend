@@ -1,9 +1,9 @@
 import express, { Request, Response, Express } from "express";
 import { PrismaClient } from "@prisma/client";
 import TaskRouter from "./routes/tasks";
-import HTTPSMiddleware from './middleware/https';
+import cors from "cors";
 //import { createRequire } from 'module';
-import swaggerUi from 'swagger-ui-express';
+//import swaggerUi from 'swagger-ui-express';
 //import swaggerDocument from './swagger.json';
 //const require = createRequire(import.meta.url);
 
@@ -21,9 +21,10 @@ const main = async () => {
 
   app.listen(port);
 
-  HTTPSMiddleware(app);
+  //HTTPSMiddleware(app);
 
-  app.use('/api-docs', swaggerUi.serve);//, swaggerUi.setup(swaggerDocument));
+  //app.use('/api-docs', swaggerUi.serve);//, swaggerUi.setup(swaggerDocument));
+  app.use(cors());
 
   // Json Parser
   app.use(express.json());
