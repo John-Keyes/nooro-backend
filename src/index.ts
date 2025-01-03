@@ -18,7 +18,6 @@ const main = async () => {
 
   // Register API routes
   app.use("/tasks", TaskRouter);
-  console.log(port);
 
   app.listen(port);
 
@@ -32,7 +31,7 @@ const main = async () => {
 }
 
 main().then(async () => {
-    await prisma.$connect();
+      await prisma.$connect();
     }).catch(async () => {
         await prisma.$disconnect();
         process.exit(1);

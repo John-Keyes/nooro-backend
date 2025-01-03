@@ -29,7 +29,6 @@ import { Task, TaskList } from "models/tasks";
     const Create = async (req: Request, res: Response) => {
         try {
             const { title, color, completed } = req.body;
-            console.log(title);
             const newTask: Task = await prisma.tasks.create({
               data: {
                 title,
