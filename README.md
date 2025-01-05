@@ -27,8 +27,11 @@ npm install
 ```bash
 npm run migrate
 ```
-
-- run this command before running the frontend application in a separate terminal
+- Push Changes
+```bash
+npm run push
+```
+- Run this command before running the frontend application in a separate terminal
 ```bash
 npm run dev
 ```

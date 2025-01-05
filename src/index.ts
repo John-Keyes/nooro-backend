@@ -1,13 +1,11 @@
 import express, { Request, Response, Express } from "express";
 import { PrismaClient } from "@prisma/client";
-import TaskRouter from "./routes/tasks";
+import routes from "./routes";
 import cors from "cors";
-//import { createRequire } from 'module';
-//import swaggerUi from 'swagger-ui-express';
-//import swaggerDocument from './swagger.json';
-//const require = createRequire(import.meta.url);
+import dotenv from "dotenv";
 
 export const prisma = new PrismaClient();
+dotenv.config();
 
 const app = express();
 const port = process.env.API_PORT;
@@ -15,18 +13,17 @@ const port = process.env.API_PORT;
 
 const main = async () => {
   app.use(express.json());
-
   // Register API routes
-  app.use("/tasks", TaskRouter);
+  app.use("/", routes);
 
   app.listen(port);
+  const corsOptions = {
+    origin: [`${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`],
+    optionsSuccessStatus: 200
+  };
+  app.use(cors(corsOptions));
 
-  //app.use('/api-docs', swaggerUi.serve);//, swaggerUi.setup(swaggerDocument));
-  app.use(cors());
-
-  // Json Parser
   app.use(express.json());
-  // Parses url encoded 
   app.use(express.urlencoded({extended: true}));
 }
 
