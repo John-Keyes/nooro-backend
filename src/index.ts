@@ -9,23 +9,38 @@ dotenv.config();
 
 const app = express();
 const port = process.env.API_PORT;
+const fullClientUrl = `${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`;
 
 
 const main = async () => {
   app.use(express.json());
-  // Register API routes
-  app.use("/", routes);
+  app.use(express.urlencoded({extended: true}));
 
-  app.listen(port);
+  //app.use(cors());
   const corsOptions = {
-    origin: [`${process.env.CLIENT_URL}:${process.env.CLIENT_PORT}`],
-    optionsSuccessStatus: 200
+    origin: fullClientUrl
   };
   app.use(cors(corsOptions));
 
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}));
+  //curl -H "Origin: http://localhost:4040" --head http://localhost:3040/tasks
+
+  // Register API routes
+  app.use("/", (req: Request, res: Response, next) => {
+    res.set({
+      "Access-Control-Allow-Origin": fullClientUrl,
+      "Content-Type": "application/json"
+    });
+    next();
+  }, routes);
+  /*app.use("/", (req: Request, res: Response, next) => {
+    res.header("Access-Control-Allow-Origin", fullClientUrl);
+    res.header("Content-Type", "Application/JSON");
+    next();
+  })*/
+
+  app.listen(port);
 }
+  
 
 main().then(async () => {
       await prisma.$connect();
