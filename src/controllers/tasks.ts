@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import { prisma } from "../index";
-import { Task, TaskList } from "models/tasks";
+import { Task } from "models/tasks";
 
     const GetTasks = async (req: Request, res: Response) => {
         try {
-            const tasks = await prisma.tasks.findMany();
-            const taskCount = tasks.length;
-            const completedCount = tasks.filter(task => task.completed == true).length;
-            const taskList: TaskList = {tasks, taskCount, completedCount};
-            res.status(200).json(taskList);
+            const tasks: Task[] = await prisma.tasks.findMany();
+            res.status(200).json(tasks);
         } catch (e) {
             res.status(500).json({ error: e });
         }
@@ -61,13 +58,13 @@ import { Task, TaskList } from "models/tasks";
     }
     const Remove = async (req: Request, res: Response) => {
         try {
-            const { id } = req.body;
-            await prisma.tasks.delete({
+            const { id } = req.params;
+            const deletedTask = await prisma.tasks.delete({
               where: {
                 id: Number(id),
               }
             });
-            res.status(200).json();
+            res.status(200).json(deletedTask);
         } catch (e) {
             res.status(500).json({ error: e });
         }

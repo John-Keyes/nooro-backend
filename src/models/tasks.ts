@@ -11,10 +11,4 @@ type NewTask = {
     completed: boolean
 }
 
-type TaskList = {
-    tasks: Task[],
-    taskCount: number,
-    completedCount: number
-}
-
-export type {NewTask, Task, TaskList};
+export type {NewTask, Task};
